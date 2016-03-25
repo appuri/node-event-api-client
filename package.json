@@ -1,21 +1,24 @@
 {
-  "name": "loader-streams",
-  "version": "1.0.0",
-  "description": "common library for various useful streams for writing loaders.",
+  "name": "appuri-event-api-client",
+  "version": "0.1.0",
+  "description": "Client for the Appuri Event API",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/appuri/loader-streams.git"
+    "url": "git+https://github.com/appuri/node-event-api-client.git"
   },
-  "author": "",
+  "keywords": [
+    "appuri"
+  ],
+  "author": "Appuri, Inc <info@appuri.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/appuri/loader-streams/issues"
+    "url": "https://github.com/appuri/node-event-api-client/issues"
   },
-  "homepage": "https://github.com/appuri/loader-streams#readme",
+  "homepage": "https://github.com/appuri/node-event-api-client#readme",
   "dependencies": {
     "ndjson": "^1.4.3",
     "request": "^2.69.0"
