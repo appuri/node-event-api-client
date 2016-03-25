@@ -1,24 +1,23 @@
 'use strict'
+global.should = require('chai').should()
 
 const nock = require('nock'),
       through2 = require('through2')
 
-global.should = require('chai').should()
+describe('eventAPI', function() {
 
-describe('eventsink stream', function() {
+  const eventAPI = require('../index')
 
-  const eventsink = require('../lib/eventsink')
-
-  function sendToEventSink(event) {
+  function sendToEventAPI(event) {
 
     const stream = through2.obj()
     stream.write(event)
     stream.end()
 
-    return eventsink(stream, 'event-write-key')
+    return eventAPI(stream, 'event-write-key')
   }
 
-  it('should send objects to event sink as gzipped ldjson', function*() {
+  it('should send objects to event api as gzipped ldjson', function*() {
 
     const scope = nock('https://event-sink.appuri.net', {
         reqheaders: {
@@ -32,7 +31,7 @@ describe('eventsink stream', function() {
       .query({ jsonConnectorApiKey: 'event-write-key' })
       .reply(202)
 
-    const resp = yield sendToEventSink({ evname: 'signed_in', entype: 'user', user_id: 'be652872' })
+    const resp = yield sendToEventAPI({ evname: 'signed_in', entype: 'user', user_id: 'be652872' })
     resp.statusCode.should.equal(202)
 
     scope.isDone().should.be.true
@@ -53,7 +52,7 @@ describe('eventsink stream', function() {
       .reply(400)
 
     try {
-      yield sendToEventSink({ evname: 'signed_in', entype: 'user', user_id: 'be652872' })
+      yield sendToEventAPI({ evname: 'signed_in', entype: 'user', user_id: 'be652872' })
       false.should.be.true
     } catch(e) {
       e.statusCode.should.equal(400)
