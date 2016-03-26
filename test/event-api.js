@@ -49,13 +49,18 @@ describe('eventAPI', function() {
         '/e',
         '1f8b0800000000000003ab564a2dcb4bcc4d55b2522ace4ccf4b4d89cfcc53d2514acd2ba92c00099616a71601f9202a3e33052890946a666a64616ea454cb05003c55fcf93c000000')
       .query({ jsonConnectorApiKey: 'event-write-key' })
-      .reply(400)
+      .reply(400, {
+        message: 'Event #1 (offset 0) had the following errors: [isAllValidKeys: one or more JSON keys is a reserved key.]'
+      })
 
     try {
       yield sendToEventAPI({ evname: 'signed_in', entype: 'user', user_id: 'be652872' })
       false.should.be.true
     } catch(e) {
       e.statusCode.should.equal(400)
+      e.responseBody.should.deep.equal({
+        message: 'Event #1 (offset 0) had the following errors: [isAllValidKeys: one or more JSON keys is a reserved key.]'
+      })
     }
 
     scope.isDone().should.be.true
