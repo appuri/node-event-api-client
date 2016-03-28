@@ -30,7 +30,22 @@ module.exports = (readableObjectStream, eventWriteKey) => {
     serialize.on('error', reject)
     compress.on('error', reject)
     post.on('error', reject)
-    post.on('response', response => { resp = response; response.statusCode < 400 || reject(response) })
+    post.on('response', response => {
+      resp = response
+      if (response.statusCode >= 400) {
+        var body = ''
+        response.setEncoding('utf8')
+        response.on('data', d => body += d)
+        response.on('error', () => reject({ statusCode: response.statusCode }))
+        response.on('end', () => {
+          try { body = JSON.parse(body) } catch(e){}
+          reject({
+            statusCode: response.statusCode,
+            responseBody: body
+          })
+        })
+      }
+    })
 
     post.on('end', () => resolve(resp))
   })
