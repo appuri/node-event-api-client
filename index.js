@@ -4,10 +4,10 @@ const ndjson = require('ndjson'),
       request = require('request'),
       zlib = require('zlib')
 
-module.exports = (readableObjectStream, eventWriteKey) => {
+module.exports = (readableObjectStream, eventWriteKey, eventSinkHost) => {
 
   const options = {
-          url: `https://event-sink.appuri.net/e?jsonConnectorApiKey=${eventWriteKey}`,
+          url: `https://${eventSinkHost || 'event-sink.appuri.net'}/e?jsonConnectorApiKey=${eventWriteKey}`,
           headers: {
             'Content-Type': 'application/x-ldjson',
             'Content-Encoding': 'gzip'
