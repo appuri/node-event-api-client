@@ -29,7 +29,11 @@ function promiseFromStreams(streams) {
 
     streams.forEach((stream, i) => {
 
-      stream.on('error', reject)
+      stream.on('error', error => {
+
+        stream.end()
+        reject(error)
+      })
 
       if(i === streams.length - 1) {
 
