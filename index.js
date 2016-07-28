@@ -4,18 +4,18 @@ const ndjson = require('ndjson'),
       request = require('request'),
       zlib = require('zlib')
 
-function handleResponse(response, reject) {
+function handleResponse(stream, response) {
 
   if (response.statusCode >= 400) {
 
     var body = ''
     response.setEncoding('utf8')
     response.on('data', d => body += d)
-    response.on('error', () => reject({ statusCode: response.statusCode }))
+    response.on('error', () => stream.emit('error', ({ statusCode: response.statusCode })))
     response.on('end', () => {
 
       try { body = JSON.parse(body) } catch(e){}
-      reject({
+      stream.emit('error', {
         statusCode: response.statusCode,
         responseBody: body
       })
@@ -38,7 +38,7 @@ function promiseFromStreams(streams) {
       if(i === streams.length - 1) {
 
         let resp
-        stream.on('response', response => { resp = response; handleResponse(response, reject) })
+        stream.on('response', response => { resp = response; handleResponse(stream, response) })
         stream.on('end', () => resolve(resp))
       } else {
         stream.pipe(streams[i + 1])
