@@ -29,6 +29,7 @@ function promiseFromStreams(streams) {
 
     streams.forEach((stream, i) => {
 
+      stream.on('unpipe', () => stream.end())
       stream.on('error', error => {
 
         stream.end()
