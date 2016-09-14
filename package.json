@@ -1,6 +1,6 @@
 {
   "name": "appuri-event-api-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Client for the Appuri Event API",
   "main": "index.js",
   "scripts": {
@@ -18,8 +18,8 @@
   "bugs": {
     "url": "https://github.com/appuri/node-event-api-client/issues"
   },
-  "engines" : {
-    "node" : ">=0.12"
+  "engines": {
+    "node": ">= 4"
   },
   "homepage": "https://github.com/appuri/node-event-api-client#readme",
   "dependencies": {
