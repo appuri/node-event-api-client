@@ -48,15 +48,16 @@ function promiseFromStreams(streams) {
   })
 }
 
-module.exports = (streams, eventWriteKey, eventSinkHost) => {
+module.exports = (streams, eventWriteKey, eventSinkHost, eventSinkProtocol) => {
 
   if(!Array.isArray(streams)) { streams = [streams] }
 
   const serialize = ndjson.serialize(),
         compress = zlib.createGzip(),
         post = request.post({
-          url: `https://${eventSinkHost || 'event-sink.appuri.net'}/e?jsonConnectorApiKey=${eventWriteKey}`,
+          url: `${eventSinkProtocol || 'https'}://${eventSinkHost || 'event-sink.appuri.net'}/e`,
           headers: {
+            'Authorization': `Bearer ${eventWriteKey}`,
             'Content-Type': 'application/x-ldjson',
             'Content-Encoding': 'gzip'
           }
