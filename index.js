@@ -48,15 +48,27 @@ function promiseFromStreams(streams) {
   })
 }
 
-module.exports = (streams, eventWriteKey, eventSinkHost) => {
+function getEventSinkBaseUrl(eventSinkBaseUrl) {
+  if(eventSinkBaseUrl) {
+    if(eventSinkBaseUrl.toLower().startsWith('http')) {
+      return eventSinkBaseUrl
+    }
+    return `https://${eventSinkBaseUrl}`
+  }
+  return 'https://event-sink.appuri.net'
+}
+
+module.exports = (streams, eventWriteKey, eventSinkBaseUrl) => {
 
   if(!Array.isArray(streams)) { streams = [streams] }
 
+  let baseUrl = getEventSinkBaseUrl(eventSinkBaseUrl)
   const serialize = ndjson.serialize(),
         compress = zlib.createGzip(),
         post = request.post({
-          url: `https://${eventSinkHost || 'event-sink.appuri.net'}/e?jsonConnectorApiKey=${eventWriteKey}`,
+          url: `${baseUrl}/e`,
           headers: {
+            'Authorization': `Bearer ${eventWriteKey}`,
             'Content-Type': 'application/x-ldjson',
             'Content-Encoding': 'gzip'
           }
