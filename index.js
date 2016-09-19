@@ -50,7 +50,7 @@ function promiseFromStreams(streams) {
 
 function getEventSinkBaseUrl(eventSinkBaseUrl) {
   if(eventSinkBaseUrl) {
-    if(eventSinkBaseUrl.toLower().startsWith('http')) {
+    if(eventSinkBaseUrl.toLowerCase().startsWith('http')) {
       return eventSinkBaseUrl
     }
     return `https://${eventSinkBaseUrl}`
