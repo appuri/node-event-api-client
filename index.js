@@ -32,7 +32,7 @@ function promiseFromStreams(streams) {
       stream.on('unpipe', () => stream.end())
       stream.on('error', error => {
 
-        stream.end()
+        stream.end && stream.end()
         reject(error)
       })
 
